@@ -72,7 +72,6 @@ class CustomerImport implements ToCollection, SkipsEmptyRows, WithEvents, WithHe
                     'dia_chi_cu_the'   => @$row['dia_chi_cu_the'],
                     'cccd'             => @$row['cccd'],
                 ]);
-                \Log::info($row);
             } catch (\Exception $ex) {
 
             }

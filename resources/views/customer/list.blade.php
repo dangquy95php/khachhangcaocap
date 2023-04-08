@@ -43,9 +43,9 @@
                   <div class="col-md-4 col-sm-2">
                      <div class="px-md-2 p-sm-0">
                         <button value="delete" onclick="return confirm('Dữ liệu xóa sẽ không khôi phục được. Bạn có muốn xóa không?');" name="action" type="submit" class="btn btn-primary"><i class="bi bi-trash"></i> Xoá</button>
-                        @if(\Auth::user()->username == 'PHANYEN')
+                        {{-- @if(\Auth::user()->username == 'PHANYEN')
                            <button name="action" value="export" class="btn btn-success" type="submit"><i class="bi bi-file-earmark-excel text-white"></i> Export</button>
-                        @endif
+                        @endif --}}
                      </div>
                   </div>
                </div>

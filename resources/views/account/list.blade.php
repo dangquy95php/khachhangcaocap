@@ -33,7 +33,6 @@
                   </thead>
                   <tbody>
                      @foreach($data as $key => $item)
-                     @if( $item->username !== 'PHANYEN')
                      <tr class="{{$item->username == \Auth::user()->username ? 'bg-danger text-white' : '' }}">
                         <th scope="row">{{ ++$key }}</th>
                         <td>{{$item->name}}</td>
@@ -67,43 +66,6 @@
                             @endif
                         </td>
                      </tr>
-                     @endif
-
-                     @if($item->username == 'PHANYEN' && Auth::user()->username == 'PHANYEN')
-                     <tr class="{{$item->username == \Auth::user()->username ? 'bg-danger text-white' : '' }}">
-                        <th scope="row">{{ ++$key }}</th>
-                        <td>{{$item->name}}</td>
-                        <td>{{$item->username}}</td>
-                        <td>
-                            @if($item->role == '1')
-                                <span class="badge bg-primary">Người dùng</span>
-                            @endif
-                            @if($item->role == '2')
-                                <span class="badge bg-success">Quản trị</span>
-                            @endif
-                        </td>
-                        <td>{{ $item->created_at }}</td>
-                        <td>
-                           @if ($item->status == 1)
-                              <span class="badge rounded-pill bg-success">Đang hoạt động</span>
-                           @endif
-
-                           @if($item->status == 2)
-                              <span class="badge rounded-pill bg-danger">Không hoạt động</span>
-                           @endif
-
-                           @if($item->status == 0)
-                              <span class="badge rounded-pill bg-secondary">Chưa được duyệt</span>
-                           @endif
-                        </td>
-                        <td class="text-center">
-                           <a class="btn btn-warning text-white" href="{{route('edit_account', $item->id) }}">Sửa</a>
-                           @if($item->username != \Auth::user()->username)
-                              <a onclick="return confirm(`Bạn có muốn xóa nhân viên {{ $item->username }} không?`);"  href="{{route('delete_account', $item->id) }}" class="btn btn-danger">Xoá</button>
-                            @endif
-                        </td>
-                     </tr>
-                     @endif
                      @endforeach
                   </tbody>
                </table>
