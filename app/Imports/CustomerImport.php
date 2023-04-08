@@ -30,29 +30,29 @@ class CustomerImport implements ToCollection, SkipsEmptyRows, WithEvents, WithHe
 
     public function collection(Collection $rows)
     {
-        $allCustomers = Customer::select('so_hop_dong')->get();
+        $allCustomers = Customer::select('so_hop_dong', 'gioi_tinh', 'dien_thoai', 'tuoi', 'ho', 'ten')->get();
 
-        foreach ($rows as $row) 
-        {
-            $this->data[] = $row;
+        foreach ($rows as $row) {
+            foreach($allCustomers->chunk(200) as $items) {
+                foreach ($items as $item) {
+                    if (!empty($item->so_hop_dong)
+                        && !empty($row['so_hop_dong'])
+                        && $item->so_hop_dong == $row['so_hop_dong']) {
 
-            foreach($allCustomers->chunk(200) as $item) {
-                if (!empty($item->so_hop_dong)
-                && !empty($row['so_hop_dong'])
-                && $item->so_hop_dong == $row['so_hop_dong']) {
+                        break;
+                    }
+                }
+            }
+            
+            foreach($this->data as $item) {
+                if (!empty($item['so_hop_dong']) && !empty($row['so_hop_dong']) 
+                    && $item['so_hop_dong'] == $row['so_hop_dong']) {
+
                     break;
                 }
             }
 
-            foreach(collect($this->data)->chunk(200) as $item) {
-                if (!empty($item->so_hop_dong)
-                && !empty($row['so_hop_dong'])
-                && $item->so_hop_dong == $row['so_hop_dong']) {
-                    break;
-                }
-            }
-
-           try {
+            try {
                 Customer::create([
                     'so_thu_tu'        => @$row['so_thu_tu'],
                     'vpbank'           => @$row['vpbank'],
@@ -72,6 +72,7 @@ class CustomerImport implements ToCollection, SkipsEmptyRows, WithEvents, WithHe
                     'dia_chi_cu_the'   => @$row['dia_chi_cu_the'],
                     'cccd'             => @$row['cccd'],
                 ]);
+                $this->data[] = $row;
             } catch (\Exception $ex) {
 
             }
