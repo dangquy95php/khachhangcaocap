@@ -1,0 +1,44 @@
+/*------------------------------------------------------------
+layout
+------------------------------------------------------------*/
+/*
+------------------------------------------------------------*/
+body {
+    width: 100%;
+    padding: 80px 0 0;
+    @include sp {
+        padding: 60px 0 0;
+    }
+
+    &.is-fixed {
+        position: fixed;
+    }
+}
+
+/*
+------------------------------------------------------------*/
+.l-content {
+    max-width: 1040px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 30px;
+    position: relative;
+    z-index: 2;
+    @include sp {
+        max-width: 100%;
+    }
+}
+
+/*
+------------------------------------------------------------*/
+.l-container {
+    max-width: 1180px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 30px;
+    position: relative;
+    z-index: 2;
+    @include sp {
+        max-width: 100%;
+    }
+}

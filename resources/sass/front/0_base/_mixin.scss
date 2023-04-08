@@ -1,0 +1,78 @@
+//============================================
+// サイト幅でセンタリング
+//============================================
+//@mixin center{
+//	width: $baseWidth;
+//	margin: 0 auto;
+//}
+
+//============================================
+// clearfix
+//============================================
+@mixin clear {
+    *zoom: 1;
+
+    &:after {
+        display: block;
+        content: "";
+        clear: both;
+    }
+}
+
+//============================================
+// フォント
+//============================================
+@mixin mincyo() {
+    font-family: "游明朝", YuMincho, "ヒラギノ明朝 ProN W3", "Hiragino Mincho ProN", "HG明朝E", "ＭＳ Ｐ明朝",
+        "ＭＳ 明朝", serif;
+}
+
+@mixin mincho() {
+    font-family: "游明朝", YuMincho, "ヒラギノ明朝 ProN W3", "Hiragino Mincho ProN", "HG明朝E", "ＭＳ Ｐ明朝",
+        "ＭＳ 明朝", serif;
+}
+
+@mixin Roboto-Condensed() {
+    font-family: "Roboto Condensed", sans-serif;
+}
+
+//============================================
+// breakpoint
+//============================================
+@mixin sp {
+    @media screen and (max-width: #{$breakpoint1}) {
+        @content;
+    }
+}
+
+@mixin pc {
+    @media screen and (min-width: #{$breakpoint1+1}) {
+        @content;
+    }
+}
+
+@mixin min-w($breakpoint) {
+    @media screen and (min-width: #{$breakpoint}) {
+        @content;
+    }
+}
+
+@mixin max-w($breakpoint) {
+    @media screen and (max-width: #{$breakpoint}) {
+        @content;
+    }
+}
+
+@mixin ie {
+    @media all and (-ms-high-contrast: none) {
+        @content;
+    }
+}
+
+@mixin hover {
+    @include pc {
+        &:hover {
+            @content;
+        }
+    }
+}
