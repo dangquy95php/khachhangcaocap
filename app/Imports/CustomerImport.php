@@ -20,7 +20,7 @@ class CustomerImport implements ToCollection, SkipsEmptyRows, WithEvents, WithHe
 {
     use Importable;
 
-    const RUN_EVERY_TIME = 200;
+    const RUN_EVERY_TIME = 1000;
     public $data = [];
 
     public function headingRow(): int
@@ -30,51 +30,43 @@ class CustomerImport implements ToCollection, SkipsEmptyRows, WithEvents, WithHe
 
     public function collection(Collection $rows)
     {
-        $allCustomers = Customer::select('so_hop_dong', 'gioi_tinh', 'dien_thoai', 'tuoi', 'ho', 'ten')->get();
-
         foreach ($rows as $row) {
-            foreach($allCustomers->chunk(200) as $items) {
-                foreach ($items as $item) {
-                    if (!empty($item->so_hop_dong)
-                        && !empty($row['so_hop_dong'])
-                        && $item->so_hop_dong == $row['so_hop_dong']) {
-
-                        break;
+            if (!empty(@$row['so_hop_dong'])) {
+                $isExists = Customer::where('so_hop_dong', @$row['so_hop_dong'])->exists();
+                
+                if (!$isExists) {
+                    $result = Customer::where('ho', @$row['ho'])
+                                    ->where('ten', @$row['ten'])
+                                    ->where('gioi_tinh', @$row['gioi_tinh'])
+                                    ->where('dien_thoai', @$row['dien_thoai'])
+                                    ->where('tuoi', @$row['tuoi'])->exists();
+                                  
+                    if (!$result) {
+                        try {
+                            $tenKh = @$row['ten_kh'] ? @$row['ten_kh'] : @$row['ho'] .' '. @$row['ten'];
+                            $customer = new Customer;
+                            $customer->so_thu_tu = @$row['so_thu_tu'];
+                            $customer->vpbank = @$row['vpbank'];
+                            $customer->msdl = @$row['msdl'];
+                            $customer->cv = @$row['cv'];
+                            $customer->so_hop_dong = @$row['so_hop_dong'];
+                            $customer->ngay_tham_gia = @$row['ngay_tham_gia'];
+                            $customer->menh_gia = @$row['menh_gia'];
+                            $customer->nam_dao_han = @$row['nam_dao_han'];
+                            $customer->ho = @$row['ho'];
+                            $customer->ten = @$row['ten'];
+                            $customer->ten_kh = $tenKh;
+                            $customer->gioi_tinh = @$row['gioi_tinh'];
+                            $customer->ngay_sinh = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject(@$row['ngay_sinh'])->format('d/m/Y');
+                            $customer->tuoi = @$row['tuoi'];
+                            $customer->dien_thoai = @$row['dien_thoai'];
+                            $customer->dia_chi_cu_the = @$row['dia_chi_cu_the'];
+                            $customer->cccd = @$row['cccd'];
+    
+                            $customer->save();
+                        } catch (\Exception $ex) { }
                     }
                 }
-            }
-            
-            foreach($this->data as $item) {
-                if (!empty($item['so_hop_dong']) && !empty($row['so_hop_dong']) 
-                    && $item['so_hop_dong'] == $row['so_hop_dong']) {
-
-                    break;
-                }
-            }
-
-            try {
-                Customer::create([
-                    'so_thu_tu'        => @$row['so_thu_tu'],
-                    'vpbank'           => @$row['vpbank'],
-                    'msdl'             => @$row['msdl'],
-                    'cv'               => @$row['cv'],
-                    'so_hop_dong'      => @$row['so_hop_dong'],
-                    'ngay_tham_gia'    => @$row['ngay_tham_gia'],
-                    'menh_gia'         => @$row['menh_gia'],
-                    'nam_dao_han'      => @$row['nam_dao_han'],
-                    'ho'               => @$row['ho'],
-                    'ten'              => @$row['ten'],
-                    'ten_kh'           => @$row['ho'] .' '. @$row['ten'],
-                    'gioi_tinh'        => @$row['gioi_tinh'],
-                    'ngay_sinh'        => \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject(@$row['ngay_sinh'])->format('d/m/Y'),
-                    'tuoi'             => @$row['tuoi'],
-                    'dien_thoai'       => @$row['dien_thoai'],
-                    'dia_chi_cu_the'   => @$row['dia_chi_cu_the'],
-                    'cccd'             => @$row['cccd'],
-                ]);
-                $this->data[] = $row;
-            } catch (\Exception $ex) {
-
             }
         }
     }
