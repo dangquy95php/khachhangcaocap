@@ -62,20 +62,6 @@ class HomeController extends Controller
         $customer = $customer->customer;
         $today = $todayData->customers;
 
-        // xoa khach hang trung
-        if (!empty($customer)) {
-            $result = Customer::where('id', '!=' , $customer->id)
-                    ->where('ten_kh', $customer->ten_kh)
-                    ->where('gioi_tinh', $customer->gioi_tinh)
-                    ->where('dien_thoai', $customer->dien_thoai)
-                    ->where('tuoi', $customer->tuoi)->exists();
-
-            if ($result) {
-                Customer::where('id', $customer->id)->delete();
-                    return redirect()->to('/call'); 
-            }
-        }
-
         return view('index', compact('customer', 'history', 'areas', 'today'));
     }
 

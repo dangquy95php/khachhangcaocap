@@ -140,12 +140,14 @@
             event.preventDefault();
             $("#overlay").show();
 
+            toastr.options.positionClass = 'toast-top-full-width';
+            toastr.warning('Dữ liệu đang chạy. Không nên tắt.','',{timeOut: 0})
             var formData = new FormData();
             if ($('#formFile').get(0).files.length !== 0) {
                 formData.append('file', $('#formFile')[0].files[0]);
             }
             formData.append('_token', "{{ csrf_token() }}");
-
+            toastr.options.positionClass = 'toast-top-right';
             $.ajax({
                 url: "{{route('data_import')}}",
                 data: formData,
@@ -158,7 +160,7 @@
                     location.reload();
                 },
                 error: function(errors) {
-                    console.log(errors);
+                    toastr.remove();
                     toastr.error('Import dữ liệu thất bại!')
                     $("#overlay").hide();
                     if (errors.status == 422) {
