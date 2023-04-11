@@ -79,8 +79,8 @@ class CustomerImport implements ToCollection, SkipsEmptyRows, WithEvents, WithHe
                 $totalRows = $event->getReader()->getTotalRows();
                 $sheetName = key($totalRows);
 
-                if (!empty($sheetName) && $totalRows[$sheetName] >= 10000) {
-                   throw new \Exception('Số dòng trong file không được nhiều hơn 10000');
+                if (!empty($sheetName) && $totalRows[$sheetName] > 10000) {
+                   throw new \Exception('Số dòng trong file không được nhiều hơn 10.000');
                 }
             }
         ];
