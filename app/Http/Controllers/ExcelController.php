@@ -91,6 +91,8 @@ class ExcelController extends Controller
             if($errorCode == 1062)
                 \DB::rollback();
             return \Response::json(['message' => 'Dữ liệu thêm vào database đã có lỗi xảy ra.'. $e->getMessage()], 500);
+        } catch(\Exception $ex) {
+            return \Response::json(['message' => $ex->getMessage()], 500);
         }
         $numberRows1 = Customer::count();
         $countImported = $numberRows1 - $numberRows;
