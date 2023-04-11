@@ -111,11 +111,11 @@ class ExcelController extends Controller
 
         $uploadedFile = $request->file('file');
         $filename = $time.$uploadedFile->getClientOriginalName();
-        // \Storage::disk('local')->putFileAs(
-        //     'files/',
-        //     $uploadedFile,
-        //     $filename
-        // );
+        \Storage::disk('local')->putFileAs(
+            'files/',
+            $uploadedFile,
+            $filename
+        );
 
         return \Response::json(['message' => "Import thành công! ". $countImported ." dòng dữ liệu "], 200);
     }
