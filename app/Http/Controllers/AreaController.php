@@ -31,7 +31,7 @@ class AreaController extends Controller
 
     public function index(Request $request)
     {
-        $areas = Area::with('customers')->orderBy('updated_at', 'desc')->get();
+        $areas = Area::with('customers')->orderBy('updated_at', 'desc')->paginate(20);
         $areaAtatus = Area::getStatus();
 
         return view('area.list', compact('areas', 'areaAtatus'));
@@ -76,7 +76,7 @@ class AreaController extends Controller
     public function edit($id, Request $request)
     {
         $area = Area::find($id);
-        $areas = Area::all();
+        $areas = Area::orderBy('created_at', 'desc')->paginate(20);
         $areaAtatus = Area::getStatus();
 
         return view('area.list', compact('area', 'areas', 'areaAtatus'));
@@ -157,8 +157,8 @@ class AreaController extends Controller
 
     public function doleCustomersToArea()
     {
-        $areas = Area::with('customers')->orderBy('name', 'ASC')->get();
-        $customers = Customer::whereNull('area_id')->whereNull('called')->paginate(2000);
+        $areas = Area::with('customers')->orderBy('name', 'ASC')->paginate(20, ['*'], 'page');
+        $customers = Customer::whereNull('area_id')->whereNull('called')->paginate(1000, ['*'], 'page1');
 
         return view('area.list-dole', compact('areas', 'customers'));
     }

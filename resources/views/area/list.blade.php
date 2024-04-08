@@ -72,6 +72,7 @@
                   </tbody>
                </table>
                <!-- End Table with stripped rows -->
+               {!! $areas->links('_partials.pagination') !!} 
             </div>
          </div>
       </div>
